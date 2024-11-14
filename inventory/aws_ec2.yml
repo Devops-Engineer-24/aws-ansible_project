@@ -1,10 +1,14 @@
-plugin: aws_ec2
+plugin: amazon.aws.aws_ec2
 regions:
-  - us-east-1
+  - us-east-1  # Adjust based on your region
 filters:
-  tag: "Environment:prod"  # Filter for your EC2 instances based on tags
+  instance-state-name: running  # Optional filter to only get running instances
 keyed_groups:
   - key: tags.Name
-    prefix: 'ec2_'
+    prefix: tag_Name
+  - key: instance_type
+    prefix: instance_type
 hostnames:
-  - dns
+  - tag:Name
+  - private_ip
+  - public_ip
