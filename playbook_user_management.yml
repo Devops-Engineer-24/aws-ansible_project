@@ -1,7 +1,9 @@
 - name: Manage IAM Users
+  hosts: all 
   gather_facts: no
   vars_files:
     - profiles/aws_profile.json
   tasks:
     - include_tasks: roles/aws_user_management/tasks/create_user.yml
       when: task_name == 'create_user'
+
