@@ -17,26 +17,34 @@ jobs:
   ansible:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout the code from the repository
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Step 2: Set up Python environment
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
+      # Step 3: Install required dependencies (Ansible, AWS SDK)
       - name: Install dependencies
         run: |
           pip install ansible boto3
 
+      # Step 4: Install Amazon AWS Collection
       - name: Install Amazon AWS Collection
         run: |
-         ansible-galaxy collection install amazon.aws
+          ansible-galaxy collection install amazon.aws
 
+      # Step 5: Set AWS Credentials for accessing AWS resources
+      - name: Set AWS Credentials
+        run: |
+          echo "AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}" >> $GITHUB_ENV
+          echo "AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}" >> $GITHUB_ENV
+          echo "AWS_DEFAULT_REGION=${{ secrets.AWS_DEFAULT_REGION }}" >> $GITHUB_ENV
+
+      # Step 6: Run the playbook based on the task name from workflow_dispatch
       - name: Run Playbook for User Management
         run: |
-          ansible-playbook -i inventory/aws_ec2.yml playbook_user_management.yml --extra-vars "task_name=create_user" -vvv
-
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          ansible-playbook -i inventory/aws_ec2.yml playbook_user_management.yml --extra-vars "task_name=${{ github.event.inputs.task_name }}" -vvv
