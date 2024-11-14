@@ -31,7 +31,8 @@ jobs:
 
       - name: Run Playbook for User Management
         run: |
-          ansible-playbook -i inventory/aws_ec2.yml playbook_user_management.yml --extra-vars "task_name=${{ github.event.inputs.task_name }}"
+          ansible-playbook -i inventory/aws_ec2.yml playbook_user_management.yml --extra-vars "task_name=create_user" -vvv
+
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
