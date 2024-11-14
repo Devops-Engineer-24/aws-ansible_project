@@ -1,0 +1,6 @@
+---
+- name: Create IAM user
+  amazon.aws.iam_user:
+    name: "{{ iam_user_name }}"
+    state: present
+  register: iam_user

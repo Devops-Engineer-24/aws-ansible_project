@@ -1,0 +1,8 @@
+- name: Manage Files
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - profiles/aws_profile.json
+  tasks:
+    - include_tasks: roles/aws_file_management/tasks/copy_files.yml
+      when: task_name == 'copy_files'

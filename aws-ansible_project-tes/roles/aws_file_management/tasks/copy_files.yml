@@ -1,0 +1,6 @@
+---
+- name: Copy file from source to destination
+  ansible.builtin.copy:
+    src: "{{ source_file }}"
+    dest: "{{ destination_path }}"
+  register: file_copy

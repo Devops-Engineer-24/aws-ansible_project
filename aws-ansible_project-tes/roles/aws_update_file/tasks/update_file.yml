@@ -1,0 +1,6 @@
+---
+- name: Update a file with new content
+  ansible.builtin.lineinfile:
+    path: "{{ destination_path }}"
+    line: "New content added to the file"
+  register: file_update

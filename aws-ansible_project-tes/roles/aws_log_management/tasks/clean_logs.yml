@@ -1,0 +1,6 @@
+---
+- name: Clean logs in a specific log file
+  ansible.builtin.file:
+    path: "{{ log_file_path }}"
+    state: absent
+  register: cleaned_log

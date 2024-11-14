@@ -1,0 +1,8 @@
+- name: Manage Logs
+  hosts: localhost
+  gather_facts: no
+  vars_files:
+    - profiles/aws_profile.json
+  tasks:
+    - include_tasks: roles/aws_log_management/tasks/clean_logs.yml
+      when: task_name == 'clean_logs'
