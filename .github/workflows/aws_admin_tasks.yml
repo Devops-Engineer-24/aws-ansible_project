@@ -29,6 +29,10 @@ jobs:
         run: |
           pip install ansible boto3
 
+      - name: Install Amazon AWS Collection
+        run: |
+         ansible-galaxy collection install amazon.aws
+
       - name: Run Playbook for User Management
         run: |
           ansible-playbook -i inventory/aws_ec2.yml playbook_user_management.yml --extra-vars "task_name=create_user" -vvv
