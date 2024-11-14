@@ -1,5 +1,4 @@
 - name: Manage IAM Users
-  hosts: localhost
   gather_facts: no
   vars_files:
     - profiles/aws_profile.json
