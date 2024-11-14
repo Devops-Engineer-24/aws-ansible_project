@@ -1,4 +1,12 @@
-all:
-  hosts:
-    localhost:
-      ansible_connection: local
+plugin: amazon.aws.aws_ec2
+regions:
+  - ap-south-1
+filters:
+  tag:Environment: prod
+  instance-state-name: running
+hostnames:
+  - private-ip-address
+auth:
+  aws_profile: prod_profile
+keyed_groups:
+  - key: tags.Name
