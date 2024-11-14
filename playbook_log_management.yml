@@ -1,5 +1,4 @@
 - name: Manage Logs
-  hosts: localhost
   gather_facts: no
   vars_files:
     - profiles/aws_profile.json
