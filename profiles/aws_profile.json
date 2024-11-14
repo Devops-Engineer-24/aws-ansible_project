@@ -1,5 +1,5 @@
 {
-  "aws_region": "us-east-1",
+  "aws_region": "ap-south-1",
   "instance_id": "i-0abcd1234efgh5678",
   "iam_user_name": "new-admin-user",
   "log_file_path": "/var/log/myapp.log",
