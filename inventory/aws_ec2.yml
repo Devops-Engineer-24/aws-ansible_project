@@ -1,14 +1,7 @@
-plugin: amazon.aws.aws_ec2
+plugin: amazon.aws.ec2
 regions:
-  - ap-south-1  # Modify this with the correct region
-filters:
-  instance-state-name: running  # Filters only running instances
+  - us-west-2  # Replace with your region
 keyed_groups:
-  - key: tags.Name
-    prefix: tag_Name
-  - key: instance_type
-    prefix: instance_type
+  - key: tags.Name  # Optionally, you can group instances by tags
 hostnames:
-  - tag:Name
-  - private_ip
-  - public_ip
+  - dns_name  # Or use 'private_ip' depending on your requirement
