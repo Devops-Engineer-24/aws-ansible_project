@@ -1,55 +1,54 @@
-name: Run AWS Admin Tasks with Ansible
+name: AWS EC2 Admin Tasks
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       task:
-        description: 'The task to execute (user, logs, file, update)'
+        description: 'Choose the task to run (user_create, file_update, log_cleanup)'
         required: true
-        default: 'user'
-      profile:
-        description: 'The profile to use (aws_profile.json)'
-        required: true
-        default: 'aws_profile'
+        default: 'user_create'
+        type: choice
+        options:
+          - user_create
+          - file_update
+          - log_cleanup
 
 jobs:
-  run_task:
+  ansible:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-    - name: Install Ansible and dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install ansible
-        ansible-galaxy collection install amazon.aws
+      - name: Install dependencies
+        run: |
+          pip install ansible boto3
 
-    - name: Run User Management Playbook
-      if: ${{ github.event.inputs.task == 'user' }}
-      run: |
-        ansible-playbook playbook_user_management.yml -e "task_name=create_user profile_name=${{ github.event.inputs.profile }}"
+      - name: Run User Creation Playbook
+        if: ${{ github.event.inputs.task == 'user_create' }}
+        run: |
+          ansible-playbook -i inventory/aws_ec2.yml playbook_user_management.yml
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: Run Log Management Playbook
-      if: ${{ github.event.inputs.task == 'logs' }}
-      run: |
-        ansible-playbook playbook_log_management.yml -e "task_name=clean_logs profile_name=${{ github.event.inputs.profile }}"
+      - name: Run File Update Playbook
+        if: ${{ github.event.inputs.task == 'file_update' }}
+        run: |
+          ansible-playbook -i inventory/aws_ec2.yml playbook_file_management.yml
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-    - name: Run File Management Playbook
-      if: ${{ github.event.inputs.task == 'file' }}
-      run: |
-        ansible-playbook playbook_file_management.yml -e "task_name=copy_files profile_name=${{ github.event.inputs.profile }}"
-
-    - name: Run File Update Playbook
-      if: ${{ github.event.inputs.task == 'update' }}
-      run: |
-        ansible-playbook playbook_update_file.yml -e "task_name=update_file profile_name=${{ github.event.inputs.profile }}"
+      - name: Run Log Cleanup Playbook
+        if: ${{ github.event.inputs.task == 'log_cleanup' }}
+        run: |
+          ansible-playbook -i inventory/aws_ec2.yml playbook_log_management.yml
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
