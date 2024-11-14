@@ -1,8 +1,8 @@
 plugin: amazon.aws.aws_ec2
 regions:
-  - us-east-1  # Adjust based on your region
+  - ap-south-1  # Modify this with the correct region
 filters:
-  instance-state-name: running  # Optional filter to only get running instances
+  instance-state-name: running  # Filters only running instances
 keyed_groups:
   - key: tags.Name
     prefix: tag_Name
