@@ -1,6 +1,6 @@
 plugin: amazon.aws.ec2
 regions:
-  - us-west-2  # Replace with your region
+  - ap-south-1  # Replace with your region
 keyed_groups:
   - key: tags.Name  # Optionally, you can group instances by tags
 hostnames:
